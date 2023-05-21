@@ -52,6 +52,12 @@ public class StudentServiceImpl implements StudentService {
       return studentRepository.save(student);
   }
 
+  @Override
+  public void deleteStudent(String id) {
+    studentRepository.findById(formatUUIDString(id)).orElseThrow(StudentIdNotFoundException::new);
+    studentRepository.deleteById(formatUUIDString(id));
+  }
+
   private Student convertToStudent(NewStudentRequestDTO newStudentRequest) {
     return new Student(newStudentRequest.getName(), newStudentRequest.getEmail());
   }

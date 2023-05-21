@@ -17,4 +17,6 @@ public interface StudentService {
   StudentListDTO getAllStudent();
 
   Student modifyStudentData(String id, NewStudentRequestDTO studentNewData);
+
+  void deleteStudent(String id);
 }

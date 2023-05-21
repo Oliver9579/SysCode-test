@@ -47,4 +47,11 @@ public class StudentController {
       return ResponseEntity.ok(studentService.modifyStudentData(id, studentNewData));
   }
 
+  @DeleteMapping("/{id}")
+  public ResponseEntity deleteStudent(@PathVariable(name = "id") String id) {
+    logger.info("Received request to delete student data with ID: {}", id);
+    studentService.deleteStudent(id);
+    return ResponseEntity.noContent().build();
+  }
+
 }
