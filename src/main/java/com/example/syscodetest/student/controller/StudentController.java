@@ -1,6 +1,5 @@
 package com.example.syscodetest.student.controller;
 
-import com.example.syscodetest.exceptions.InvalidUUIDException;
 import com.example.syscodetest.student.models.dtos.NewStudentRequestDTO;
 import com.example.syscodetest.student.models.dtos.StudentListDTO;
 import com.example.syscodetest.student.models.entities.Student;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -43,8 +41,8 @@ public class StudentController {
   @PutMapping("/{id}")
   public ResponseEntity<Student> modifyStudentData(@PathVariable(name = "id") String id,
                                                    @Valid @RequestBody NewStudentRequestDTO studentNewData) {
-      logger.info("Received request to modify student data with ID: {}", id);
-      return ResponseEntity.ok(studentService.modifyStudentData(id, studentNewData));
+    logger.info("Received request to modify student data with ID: {}", id);
+    return ResponseEntity.ok(studentService.modifyStudentData(id, studentNewData));
   }
 
   @DeleteMapping("/{id}")
