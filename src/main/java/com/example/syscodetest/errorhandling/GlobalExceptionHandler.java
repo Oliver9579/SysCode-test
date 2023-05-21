@@ -1,6 +1,8 @@
 package com.example.syscodetest.errorhandling;
 
 import com.example.syscodetest.exceptions.EmailAlreadyUsedException;
+import com.example.syscodetest.exceptions.InvalidUUIDException;
+import com.example.syscodetest.exceptions.StudentIdNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -34,6 +36,16 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(EmailAlreadyUsedException.class)
   public ResponseEntity<ErrorMessage> handlePlateAlreadyUsedExceptions(EmailAlreadyUsedException e) {
     return ResponseEntity.status(400).body(new ErrorMessage(e.getMessage()));
+  }
+
+  @ExceptionHandler(InvalidUUIDException.class)
+  public ResponseEntity<ErrorMessage> handleInvalidUUIDException(InvalidUUIDException e) {
+    return ResponseEntity.status(400).body(new ErrorMessage(e.getMessage()));
+  }
+
+  @ExceptionHandler(StudentIdNotFoundException.class)
+  public ResponseEntity<ErrorMessage> handleStudentIdNotFoundException(StudentIdNotFoundException e) {
+    return ResponseEntity.status(404).body(new ErrorMessage(e.getMessage()));
   }
 
 }

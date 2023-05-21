@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
@@ -22,6 +19,7 @@ import java.util.UUID;
 public class Student {
 
   @Id
+  @GeneratedValue(generator = "uuid4")
   private UUID id;
 
   @NotBlank
