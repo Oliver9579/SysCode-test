@@ -45,35 +45,29 @@ public class StudentServiceImpl implements StudentService {
 
   @Override
   public Student modifyStudentData(String id, NewStudentRequestDTO studentNewData) {
+    try {
       isEmailExist(studentNewData.getEmail());
-      Student student = studentRepository.findById(formatUUIDString(id)).orElseThrow(StudentIdNotFoundException::new);
+      Student student = studentRepository.findById(UUID.fromString(id)).orElseThrow(StudentIdNotFoundException::new);
       student.setEmail(studentNewData.getEmail());
       student.setName(studentNewData.getName());
       return studentRepository.save(student);
+    } catch (IllegalArgumentException e) {
+      throw new InvalidUUIDException();
+    }
   }
 
   @Override
   public void deleteStudent(String id) {
-    studentRepository.findById(formatUUIDString(id)).orElseThrow(StudentIdNotFoundException::new);
-    studentRepository.deleteById(formatUUIDString(id));
+    try {
+      studentRepository.findById(UUID.fromString(id)).orElseThrow(StudentIdNotFoundException::new);
+      studentRepository.deleteById(UUID.fromString(id));
+    } catch (IllegalArgumentException e) {
+      throw new InvalidUUIDException();
+    }
   }
 
   private Student convertToStudent(NewStudentRequestDTO newStudentRequest) {
     return new Student(newStudentRequest.getName(), newStudentRequest.getEmail());
   }
 
-  private UUID formatUUIDString(String id) {
-    if (id.replace("-","").length() < 32) throw new InvalidUUIDException();
-    try {
-      if (id.contains("-")) return UUID.fromString(id);
-      StringBuilder sb = new StringBuilder(id);
-      sb.insert(8, "-")
-              .insert(13, "-")
-              .insert(18, "-")
-              .insert(23, "-");
-      return UUID.fromString(sb.toString());
-    } catch (IllegalArgumentException e) {
-      throw new InvalidUUIDException();
-    }
-  }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Student {
 
   @Id
   @GeneratedValue(generator = "uuid4")
+  @Type(type = "uuid-char")
   private UUID id;
 
   @NotBlank
