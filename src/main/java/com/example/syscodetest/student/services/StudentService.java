@@ -19,4 +19,6 @@ public interface StudentService {
   Student modifyStudentData(String id, NewStudentRequestDTO studentNewData);
 
   void deleteStudent(String id);
+
+  Student convertToStudent(NewStudentRequestDTO newStudentRequest);
 }

@@ -66,7 +66,8 @@ public class StudentServiceImpl implements StudentService {
     }
   }
 
-  private Student convertToStudent(NewStudentRequestDTO newStudentRequest) {
+  @Override
+  public Student convertToStudent(NewStudentRequestDTO newStudentRequest) {
     return new Student(newStudentRequest.getName(), newStudentRequest.getEmail());
   }
 
