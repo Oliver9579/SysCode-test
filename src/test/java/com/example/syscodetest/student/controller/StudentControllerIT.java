@@ -19,9 +19,7 @@ import java.nio.charset.StandardCharsets;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -214,6 +212,35 @@ public class StudentControllerIT {
             .andExpect(jsonPath("$.message", is("please provide every necessary detail")));
   }
 
+  @Test
+  public void deleteStudent_should_returnNoContentStatus_whenDeleteAStudent() throws Exception {
+    mockMvc.perform(delete("/api/students/9ad00b0b-cd3d-445e-85bb-309ee9d312cc"))
+            .andExpect(status().isNoContent());
+  }
 
+  @Test
+  public void deleteStudent_should_returnAnError_when_givenUUIDFormatIsInvalid() throws Exception {
+    NewStudentRequestDTO studentNewData = new NewStudentRequestDTO("New Oli", "newoli@gmail.com");
+    mockMvc.perform(delete("/api/students/wrong uuid format")
+                    .contentType(contentType)
+                    .content(mapper.writeValueAsString(studentNewData)))
+            .andExpect(content().contentTypeCompatibleWith(contentType))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status", is("error")))
+            .andExpect(jsonPath("$.message", is("invalid UUID format!")));
+  }
+
+  @Test
+  public void deleteStudent_should_returnAnError_when_givenUUIDFormatIsValidButStudentDoesNotExist()
+          throws Exception {
+    NewStudentRequestDTO studentNewData = new NewStudentRequestDTO("New Oli", "newoli@gmail.com");
+    mockMvc.perform(delete("/api/students/73482d64-262d-4f7d-9a10-ec5ee0a77687")
+                    .contentType(contentType)
+                    .content(mapper.writeValueAsString(studentNewData)))
+            .andExpect(content().contentTypeCompatibleWith(contentType))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.status", is("error")))
+            .andExpect(jsonPath("$.message", is("Student not found")));
+  }
 
 }
