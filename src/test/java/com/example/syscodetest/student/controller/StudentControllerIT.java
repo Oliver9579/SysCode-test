@@ -142,4 +142,78 @@ public class StudentControllerIT {
     assertEquals(expectedStudent.getEmail(), receivedStudent.getEmail());
   }
 
+  @Test
+  public void modifyStudentData_should_returnAnError_when_givenUUIDFormatIsInvalid() throws Exception {
+    NewStudentRequestDTO studentNewData = new NewStudentRequestDTO("New Oli", "newoli@gmail.com");
+    mockMvc.perform(put("/api/students/wrong uuid format")
+                    .contentType(contentType)
+                    .content(mapper.writeValueAsString(studentNewData)))
+            .andExpect(content().contentTypeCompatibleWith(contentType))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status", is("error")))
+            .andExpect(jsonPath("$.message", is("invalid UUID format!")));
+  }
+
+  @Test
+  public void modifyStudentData_should_returnAnError_when_givenUUIDFormatIsValidButStudentDoesNotExist()
+          throws Exception {
+    NewStudentRequestDTO studentNewData = new NewStudentRequestDTO("New Oli", "newoli@gmail.com");
+    mockMvc.perform(put("/api/students/73482d64-262d-4f7d-9a10-ec5ee0a77687")
+                    .contentType(contentType)
+                    .content(mapper.writeValueAsString(studentNewData)))
+            .andExpect(content().contentTypeCompatibleWith(contentType))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.status", is("error")))
+            .andExpect(jsonPath("$.message", is("Student not found")));
+  }
+
+  @Test
+  public void modifyStudentData_should_returnAnError_when_givenNewEmailAlreadyExists() throws Exception {
+    NewStudentRequestDTO newStudentRequest = new NewStudentRequestDTO("Juli2", "juli@gmail.com");
+    mockMvc.perform(put("/api/students/9f22e3a5-4589-4516-8966-21cef7a80580")
+                    .contentType(contentType)
+                    .content(mapper.writeValueAsString(newStudentRequest)))
+            .andExpect(content().contentTypeCompatibleWith(contentType))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status", is("error")))
+            .andExpect(jsonPath("$.message", is("there is already a student in the database with the provided email")));
+  }
+
+  @Test
+  public void modifyStudentData_should_returnAnError_when_requestBodyIsEmpty() throws Exception {
+    mockMvc.perform(put("/api/students/9f22e3a5-4589-4516-8966-21cef7a80580")
+                    .contentType(contentType)
+                    .content(mapper.writeValueAsString("{}")))
+            .andExpect(content().contentTypeCompatibleWith(contentType))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status", is("error")))
+            .andExpect(jsonPath("$.message", is("Request body is empty!")));
+  }
+
+  @Test
+  public void modifyStudentData_should_returnAnError_when_givenEmailIsInvalid() throws Exception {
+    NewStudentRequestDTO newStudentRequest = new NewStudentRequestDTO("Oli2", "oligmail.com");
+    mockMvc.perform(put("/api/students/9f22e3a5-4589-4516-8966-21cef7a80580")
+                    .contentType(contentType)
+                    .content(mapper.writeValueAsString(newStudentRequest)))
+            .andExpect(content().contentTypeCompatibleWith(contentType))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status", is("error")))
+            .andExpect(jsonPath("$.message", is("invalid email format")));
+  }
+
+  @Test
+  public void modifyStudentData_should_returnAnError_when_someInputIsMissing() throws Exception {
+    NewStudentRequestDTO newStudentRequest = new NewStudentRequestDTO("Oli2", "");
+    mockMvc.perform(put("/api/students/9f22e3a5-4589-4516-8966-21cef7a80580")
+                    .contentType(contentType)
+                    .content(mapper.writeValueAsString(newStudentRequest)))
+            .andExpect(content().contentTypeCompatibleWith(contentType))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status", is("error")))
+            .andExpect(jsonPath("$.message", is("please provide every necessary detail")));
+  }
+
+
+
 }

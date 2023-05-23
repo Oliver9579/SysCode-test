@@ -46,8 +46,8 @@ public class StudentServiceImpl implements StudentService {
   @Override
   public Student modifyStudentData(String id, NewStudentRequestDTO studentNewData) {
     try {
-      isEmailExist(studentNewData.getEmail());
       Student student = studentRepository.findById(UUID.fromString(id)).orElseThrow(StudentIdNotFoundException::new);
+      isEmailExist(studentNewData.getEmail());
       student.setEmail(studentNewData.getEmail());
       student.setName(studentNewData.getName());
       return studentRepository.save(student);
