@@ -7,4 +7,5 @@ public class StudentIdNotFoundException extends RuntimeException {
   public StudentIdNotFoundException() {
     super(message);
   }
+
 }

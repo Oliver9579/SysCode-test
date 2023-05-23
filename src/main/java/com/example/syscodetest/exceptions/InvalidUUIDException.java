@@ -7,4 +7,5 @@ public class InvalidUUIDException extends RuntimeException {
   public InvalidUUIDException() {
     super(message);
   }
+
 }

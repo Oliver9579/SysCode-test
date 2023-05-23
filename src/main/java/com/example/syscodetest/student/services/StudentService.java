@@ -21,4 +21,5 @@ public interface StudentService {
   void deleteStudent(String id);
 
   Student convertToStudent(NewStudentRequestDTO newStudentRequest);
+
 }

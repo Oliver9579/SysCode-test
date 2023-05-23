@@ -12,4 +12,5 @@ public interface StudentRepository extends CrudRepository<Student, UUID> {
   Optional<Student> findByEmail(String email);
 
   List<Student> findAll();
+
 }
